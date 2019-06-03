@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.flappybird"
+        applicationId "com.images"
         minSdkVersion 9
         targetSdkVersion 28
         versionCode 1
@@ -78,7 +78,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.flappybird/com.flappybird.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.images/com.images.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

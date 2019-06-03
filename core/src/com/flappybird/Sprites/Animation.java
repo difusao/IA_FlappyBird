@@ -3,9 +3,6 @@ package com.flappybird.Sprites;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-/**
- * Created by Brent on 6/26/2015.
- */
 public class Animation {
     Array<TextureRegion> frames;
     float maxFrameTime;

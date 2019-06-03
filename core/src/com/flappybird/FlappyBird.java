@@ -8,8 +8,9 @@ import com.flappybird.States.GameStateManager;
 import com.flappybird.States.MenuState;
 
 public class FlappyBird extends ApplicationAdapter {
-	public static final int WIDTH = 1184;
-	public static final int HEIGHT = 720;
+
+	public static final int WIDTH = 480;
+	public static final int HEIGHT = 800;
 	public static final float SCALE = 0.5f;
 	public static final String TITLE = "FlappyBird";
 
