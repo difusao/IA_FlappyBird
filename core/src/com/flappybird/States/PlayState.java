@@ -14,6 +14,7 @@ import com.flappybird.Sprites.Tube;
 import java.util.Locale;
 
 public class PlayState extends State {
+
     private static final int GROUND_Y_OFFSET = -30;
     private static final int TUBE_SPACING = 125;
     private static final int TUBE_COUNT = 4;
@@ -30,11 +31,17 @@ public class PlayState extends State {
     private Vector2 groundPos3;
     private Vector2 groundPos4;
     private Vector2 groundPos5;
+
     private Array<Tube> tubes;
 
     private boolean gameover;
 
     BitmapFont font;
+
+    float middleX = 0;
+    float middleY = 0;
+    float difX = 0;
+    float difY = 0;
 
     public PlayState(GameStateManager gsm){
         super(gsm);
@@ -65,6 +72,7 @@ public class PlayState extends State {
 
         gameover = false;
     }
+
     @Override
     public void handleInput() {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
@@ -87,7 +95,7 @@ public class PlayState extends State {
         handleInput();
         updateGround();
         bird.update(dt);
-        cam.position.set(bird.getX() + 80, cam.viewportHeight / 2, 0);
+        //cam.position.set(bird.getX() + 80, cam.viewportHeight / 2, 0);
 
         for(Tube tube : tubes){
             if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTopTube().getWidth())
@@ -104,7 +112,7 @@ public class PlayState extends State {
             //bird.colliding = true;
         }
 
-        cam.update();
+        //cam.update();
     }
 
     public void updateGround(){
@@ -137,38 +145,61 @@ public class PlayState extends State {
         sb.begin();
         //sb.draw(background, cam.position.x - (cam.viewportWidth / 2), 0);
 
-        float middleX = 0;
-        float middleY = 0;
-        float difX = 0;
-        float difY = 0;
+        float[] tX = new float[4];
+        float[] tY = new float[4];
+
+        int i = 0;
 
         for(Tube tube : tubes){
             sb.draw(tube.getBottomTube(), tube.getPosBottomTube().x, tube.getPosBottomTube().y);
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
 
             // Detect values distance X and Y ------------------------------------------------------
-            middleX = tube.getPosTopTube().x + tube.TUBE_GAP / 2;
+            middleX = tube.getPosTopTube().x + tube.TUBE_WIDTH / 2;
             middleY = tube.getPosTopTube().y - tube.TUBE_GAP / 2;
 
-            difX = ((middleX - 00) - (bird.getX() + 50));
-            difY =  (bird.getY());
+            tX[i] = middleX;
+            tY[i] = middleY;
 
-            if( difX > 0 && difX < 175 ) {
-                sb.draw(point, middleX-30, middleY);
-                font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", difX, difY), middleX, middleY);
-                //System.out.println(difX);
+            //if(i == 0) {
+                //bird.setX(tX[0]);
+                //bird.setY(tY[0]);
+            //}
+
+            if(bird.getX()<=tX[i]){
+                //System.out.println("X=" + bird.getX() + ", Y=" + bird.getY() + " X=" + tX[i] + ", Y=" + tY[i]);
+                System.out.println(tX[i] - bird.getX());
+            }
+
+            //difX = ((middleX - 00) - (bird.getX() + 50));
+            //difY = ((middleY - 00) - (bird.getY() - 82));
+
+            //if( difX > 0 && difX < 175 ) {
+
+                sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
+                //
+                font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
+
+                //System.out.println("-------------------------------------------------------------");
+
+                //System.out.println((bird.getY()-82));
                 //font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", Math.abs( (bird.getX() + (bird.getX()/2)) - middleX ),  Math.abs( (bird.getY()) - middleY )  ) , middleX, middleY);
                 //font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", difX, (middleY - (bird.getHeight() / 10))) , middleX -30, middleY);
                 //font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", difX, bird.getY()), middleX -30, middleY);
 
-
                 //if(bird.getY() == middleY){
                 //    System.out.println(bird.getY());
                 //}
-            }
-        }
+            //}
 
-        //System.out.println();
+            //System.out.println("Bird = " + (bird.getY()-82) + " / MiddleY = " + middleY);
+
+            //if((bird.getY()-82) == middleY){
+                //System.out.println("-------------------");
+            //}
+
+            i++;
+        }
 
         sb.draw(ground, groundPos1.x, groundPos1.y);
         sb.draw(ground, groundPos2.x, groundPos2.y);
