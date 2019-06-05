@@ -50,7 +50,7 @@ public class PlayState extends State {
         font.setColor(Color.WHITE);
         font.getData().setScale(1.0f, 1.0f);
 
-        bird = new Bird(40, 200);
+        bird = new Bird(10, 200);
         point = new Texture("images/pingo.png");
         //background = new Texture("images_original/bg.png");
         ground = new Texture("images/ground.png");
@@ -95,7 +95,7 @@ public class PlayState extends State {
         handleInput();
         updateGround();
         bird.update(dt);
-        //cam.position.set(bird.getX() + 80, cam.viewportHeight / 2, 0);
+        cam.position.set(bird.getX() + 80, cam.viewportHeight / 2, 0);
 
         for(Tube tube : tubes){
             if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTopTube().getWidth())
@@ -112,7 +112,7 @@ public class PlayState extends State {
             //bird.colliding = true;
         }
 
-        //cam.update();
+        cam.update();
     }
 
     public void updateGround(){
@@ -145,60 +145,27 @@ public class PlayState extends State {
         sb.begin();
         //sb.draw(background, cam.position.x - (cam.viewportWidth / 2), 0);
 
-        float[] tX = new float[4];
-        float[] tY = new float[4];
-
         int i = 0;
 
         for(Tube tube : tubes){
             sb.draw(tube.getBottomTube(), tube.getPosBottomTube().x, tube.getPosBottomTube().y);
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
 
-            // Detect values distance X and Y ------------------------------------------------------
             middleX = tube.getPosTopTube().x + tube.TUBE_WIDTH / 2;
             middleY = tube.getPosTopTube().y - tube.TUBE_GAP / 2;
 
-            tX[i] = middleX;
-            tY[i] = middleY;
+            difX = (middleX - (bird.getX() - 00));
+            difY = (middleY - (bird.getY() - 82));
 
-            //if(i == 0) {
-                //bird.setX(tX[0]);
-                //bird.setY(tY[0]);
-            //}
-
-            if(bird.getX()<=tX[i]){
-                //System.out.println("X=" + bird.getX() + ", Y=" + bird.getY() + " X=" + tX[i] + ", Y=" + tY[i]);
-                System.out.println(tX[i] - bird.getX());
-            }
-
-            //difX = ((middleX - 00) - (bird.getX() + 50));
-            //difY = ((middleY - 00) - (bird.getY() - 82));
-
-            //if( difX > 0 && difX < 175 ) {
+            if( difX > 0 && difX < 175 ) {
 
                 sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
-                //
                 font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
+                System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
 
-                //System.out.println("-------------------------------------------------------------");
-
-                //System.out.println((bird.getY()-82));
-                //font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", Math.abs( (bird.getX() + (bird.getX()/2)) - middleX ),  Math.abs( (bird.getY()) - middleY )  ) , middleX, middleY);
-                //font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", difX, (middleY - (bird.getHeight() / 10))) , middleX -30, middleY);
-                //font.draw(sb, String.format(Locale.US,"x=%01.1f y=%01.1f", difX, bird.getY()), middleX -30, middleY);
-
-                //if(bird.getY() == middleY){
-                //    System.out.println(bird.getY());
-                //}
-            //}
-
-            //System.out.println("Bird = " + (bird.getY()-82) + " / MiddleY = " + middleY);
-
-            //if((bird.getY()-82) == middleY){
-                //System.out.println("-------------------");
-            //}
-
-            i++;
+                if( (middleX - bird.getX()) < 2)
+                    System.out.println("-------------------------------------------------------------");
+            }
         }
 
         sb.draw(ground, groundPos1.x, groundPos1.y);
