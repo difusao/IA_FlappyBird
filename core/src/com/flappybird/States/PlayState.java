@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.flappybird.FlappyBird;
 import com.flappybird.Sprites.Bird;
 import com.flappybird.Sprites.Tube;
+import com.nn.NeuralNetWork;
 
 import java.util.Locale;
+import java.util.Random;
 
 public class PlayState extends State {
 
@@ -43,8 +46,50 @@ public class PlayState extends State {
     float difX = 0;
     float difY = 0;
 
+    // Neural Network
+    NeuralNetWork nn;
+    String pathDataSet;
+    String pathNetwork;
+    int[] layers = new int[]{2, 2, 1};
+    int weightstotal = 9;
+    int wavetotal = 1;
+    int wave = 0;
+    int gen = 0;
+    double mut = 0.05;
+    double[][] weights = new double[wavetotal][weightstotal];
+
+
     public PlayState(GameStateManager gsm){
         super(gsm);
+
+        if(Gdx.graphics.getHeight() > FlappyBird.HEIGHT){
+            // NeuralNetwork
+            pathDataSet = "/data/data/com.flappybird/files/DataSet.tset";
+            pathNetwork = "/data/data/com.flappybird/files/NeuralNetwork.nnet";
+        }else{
+            // NeuralNetwork
+            pathDataSet = "NeurophProject_FlappyBird/Training Sets/DataSet/DataSet.tset";
+            pathNetwork = "NeurophProject_FlappyBird/Neural Networks/NeuralNetwork.nnet";
+        }
+
+        // Neural Network
+        nn = new NeuralNetWork(pathDataSet, pathNetwork);
+
+        // Create NeuralNetwork
+        nn.CreateMLP(layers);
+
+        // Load NeuralNetwork
+        nn.LoadMLP();
+
+        // Generate Weights Ramdom
+        WeightsRamdom(wavetotal, weightstotal);
+
+        for(int i=0; i<wavetotal; i++) {
+            // Get Weights and test Neural Network
+            SetNN();
+        }
+
+        nn.SaveMLP();
 
         font = new BitmapFont();
         font.setColor(Color.WHITE);
@@ -71,6 +116,32 @@ public class PlayState extends State {
         groundPos5 = new Vector2(ground.getWidth() * 3, GROUND_Y_OFFSET);
 
         gameover = false;
+    }
+
+    private void SetNN(){
+        for(int i=0; i<wavetotal; i++) {
+            // Get weights and set NeuralNetwork on items
+            for (int j=0; j<weightstotal; j++) {
+                // Define weights for shots
+                nn.setWeights(weights[i]);
+
+                // Test NeuralNetwork
+                //double[] output = nn.SetNN(new double[]{targetX/100});
+                //angle[i] = (float) output[0];
+                //power[i] = (float) output[1] * 100;
+            }
+        }
+    }
+
+    public float RamdomValues(float  min, float  max){
+        Random b = new Random();
+        return min + (max - min) * b.nextFloat();
+    }
+
+    private void WeightsRamdom(int wavetotal, int weightstotal) {
+        for(int i=0; i<wavetotal; i++)
+            for(int j = 0; j< weightstotal; j++)
+                weights[i][j] = RamdomValues(-1.0000000000f, 1.0000000000f);
     }
 
     @Override
@@ -161,7 +232,8 @@ public class PlayState extends State {
 
                 sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
                 //font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
-                System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
+                //System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
+                System.out.printf(Locale.US, "output = %0 20.17f%n", nn.TestNN(new double[]{ (difX/100), (difY/100)})[0] );
 
                 if( (middleX - bird.getX()) < 2)
                     System.out.println("-------------------------------------------------------------");
