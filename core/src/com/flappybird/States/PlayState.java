@@ -160,7 +160,7 @@ public class PlayState extends State {
             if( difX > 0 && difX < 175 ) {
 
                 sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
-                font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
+                //font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
                 System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
 
                 if( (middleX - bird.getX()) < 2)
