@@ -13,6 +13,7 @@ import com.flappybird.Sprites.Bird;
 import com.flappybird.Sprites.Tube;
 import com.nn.NeuralNetWork;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
@@ -284,12 +285,14 @@ public class PlayState extends State {
             //sb.draw(gameoverImg, cam.position.x - gameoverImg.getWidth() / 2, cam.position.y);
             //RefreshWights();
 
-            float d = bird.getX();
 
-            if(d > maxDistance) {
-                maxDistance = d;
-                System.out.printf(Locale.US, "distance = %f%n", maxDistance);
-                //bestWeights = weights
+            if(bird.getX() > maxDistance) {
+                maxDistance = bird.getX();
+                double wtmp[] = nn.getWeights();
+                bestWeights = CloneWeights(wavetotal, 1, weights, wtmp, mut);
+                nn.setWeights(bestWeights[0]);
+
+                System.out.printf(Locale.US, "distance = %f %s%n", maxDistance, Arrays.toString(bestWeights[0]) );
             }
 
             start();
@@ -298,16 +301,16 @@ public class PlayState extends State {
         sb.end();
     }
 
-    private double[][] CloneWeights(int total, double[][] rWeights, double[] weights, double mut) {
+    private double[][] CloneWeights(int total, int count, double[][] rWeights, double[] weights, double mut) {
         double[][] weightsTMP = new double[total][rWeights.length];
 
         // Add shots in target
         System.out.println();
-        for(int i = 0; i < total; i++)
+        for(int i = 0; i < count; i++)
             weightsTMP[i] = rWeights[i];
 
         // Clone left weights
-        for(int i = total; i < total; i++) {
+        for(int i = count; i < total; i++) {
             double[] row = new double[weights.length];
 
             for (int j = 0; j < weights.length; j++) {
