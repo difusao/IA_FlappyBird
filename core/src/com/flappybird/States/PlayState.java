@@ -57,7 +57,8 @@ public class PlayState extends State {
     int gen = 0;
     double mut = 0.05;
     double[][] weights = new double[wavetotal][weightstotal];
-
+    double[][] bestWeights = new double[wavetotal][weightstotal];
+    float maxDistance = 0f;
 
     public PlayState(GameStateManager gsm){
         super(gsm);
@@ -82,15 +83,11 @@ public class PlayState extends State {
         nn.LoadMLP();
 
         // Generate Weights Ramdom
-        WeightsRamdom(wavetotal, weightstotal);
+        RefreshWights();
 
-        for(int i=0; i<wavetotal; i++) {
-            // Get Weights and test Neural Network
-            SetNN();
-        }
+        start();
 
-        nn.SaveMLP();
-
+        /*
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(1.0f, 1.0f);
@@ -108,6 +105,32 @@ public class PlayState extends State {
 
         //groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, GROUND_Y_OFFSET);
         //groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), GROUND_Y_OFFSET);
+
+        groundPos1 = new Vector2(ground.getWidth() * (-1), GROUND_Y_OFFSET);
+        groundPos2 = new Vector2(0, GROUND_Y_OFFSET);
+        groundPos3 = new Vector2(ground.getWidth(), GROUND_Y_OFFSET);
+        groundPos4 = new Vector2(ground.getWidth() * 2, GROUND_Y_OFFSET);
+        groundPos5 = new Vector2(ground.getWidth() * 3, GROUND_Y_OFFSET);
+
+        gameover = false;
+        */
+    }
+
+    private void start(){
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1.0f, 1.0f);
+
+        bird = new Bird(10, 200);
+        point = new Texture("images/pingo.png");
+        //background = new Texture("images_original/bg.png");
+        ground = new Texture("images/ground.png");
+        gameoverImg = new Texture("images_original/gameover.png");
+
+        tubes = new Array<Tube>();
+
+        for(int i = 1; i <= TUBE_COUNT; i++)
+            tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
 
         groundPos1 = new Vector2(ground.getWidth() * (-1), GROUND_Y_OFFSET);
         groundPos2 = new Vector2(0, GROUND_Y_OFFSET);
@@ -173,27 +196,32 @@ public class PlayState extends State {
                 tube.reposition(tube.getPosTopTube().x +((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
 
             if(tube.collides(bird.getBounds())){
-                //bird.colliding = true;
-                //gameover = true;
+                bird.colliding = true;
+                gameover = true;
             }
         }
 
         if(bird.getY() <= ground.getHeight() + GROUND_Y_OFFSET){
-            //gameover = true;
-            //bird.colliding = true;
+            bird.colliding = true;
+            gameover = true;
         }
 
         cam.update();
     }
 
-    public void updateGround(){
-        /*
-        if(cam.position.x - (cam.viewportWidth / 2) > groundPos1.x + ground.getWidth())
-            groundPos1.add(ground.getWidth() * 2, 0);
+    private void RefreshWights() {
+        // Generate Weights Ramdom
+        WeightsRamdom(wavetotal, weightstotal);
 
-        if(cam.position.x - (cam.viewportWidth / 2) > groundPos2.x + ground.getWidth())
-            groundPos2.add(ground.getWidth() * 2, 0);
-        */
+        for(int i=0; i<wavetotal; i++) {
+            // Get Weights and test Neural Network
+            SetNN();
+        }
+
+        nn.SaveMLP();
+    }
+
+    public void updateGround(){
         if(cam.position.x - (cam.viewportWidth / 2) > groundPos1.x + ground.getWidth())
             groundPos1.add(ground.getWidth() * 5, 0);
 
@@ -228,12 +256,16 @@ public class PlayState extends State {
             difX = (middleX - (bird.getX() - 00));
             difY = (middleY - (bird.getY() - 82));
 
-            if( difX > 0 && difX < 175 ) {
+            double output = nn.TestNN(new double[]{ (difX/100), (difY/100)})[0];
 
+            if(output > 0.5)
+                bird.jump();
+
+            if( difX > 0 && difX < 175 ) {
                 sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
                 //font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
                 //System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
-                System.out.printf(Locale.US, "output = %0 20.17f%n", nn.TestNN(new double[]{ (difX/100), (difY/100)})[0] );
+                //System.out.printf(Locale.US, "output = %0 20.17f%n", output );
 
                 if( (middleX - bird.getX()) < 2)
                     System.out.println("-------------------------------------------------------------");
@@ -248,9 +280,47 @@ public class PlayState extends State {
 
         sb.draw(bird.getTexture(), bird.getX(), bird.getY());
 
-        if(gameover)
-            sb.draw(gameoverImg, cam.position.x - gameoverImg.getWidth() / 2, cam.position.y);
+        if(gameover) {
+            //sb.draw(gameoverImg, cam.position.x - gameoverImg.getWidth() / 2, cam.position.y);
+            //RefreshWights();
+
+            float d = bird.getX();
+
+            if(d > maxDistance) {
+                maxDistance = d;
+                System.out.printf(Locale.US, "distance = %f%n", maxDistance);
+                //bestWeights = weights
+            }
+
+            start();
+        }
 
         sb.end();
+    }
+
+    private double[][] CloneWeights(int total, double[][] rWeights, double[] weights, double mut) {
+        double[][] weightsTMP = new double[total][rWeights.length];
+
+        // Add shots in target
+        System.out.println();
+        for(int i = 0; i < total; i++)
+            weightsTMP[i] = rWeights[i];
+
+        // Clone left weights
+        for(int i = total; i < total; i++) {
+            double[] row = new double[weights.length];
+
+            for (int j = 0; j < weights.length; j++) {
+                double rnd = Math.random();
+                if (rnd > mut)
+                    row[j] = weights[j];
+                else
+                    row[j] = RamdomValues(-1.0000000000f, 1.0000000000f);
+            }
+
+            weightsTMP[i] = row;
+        }
+
+        return weightsTMP;
     }
 }
