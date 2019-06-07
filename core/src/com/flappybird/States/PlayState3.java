@@ -17,28 +17,13 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
-public class PlayState extends State {
+public class PlayState3 extends State {
 
     private static final int GROUND_Y_OFFSET = -30;
     private static final int TUBE_SPACING = 125;
     private static final int TUBE_COUNT = 4;
 
-    // Neural Network
-    NeuralNetWork nn;
-    String pathDataSet;
-    String pathNetwork;
-    int[] layers = new int[]{2, 2, 1};
-    int weightstotal = 9;
-    int wavetotal = 10;
-    int bestbird = 0;
-    int gen = 0;
-    double mut = 0.05;
-    double[][] weights = new double[wavetotal][weightstotal];
-    double[][] bestWeights = new double[wavetotal][weightstotal];
-    float maxDistance = 0f;
-    int birdDown = 0;
-
-    private Bird[] bird = new Bird[wavetotal];
+    private Bird bird;
 
     private Texture background;
     private Texture ground;
@@ -53,16 +38,30 @@ public class PlayState extends State {
 
     private Array<Tube> tubes;
 
-    private boolean[] gameover = new boolean[wavetotal];
+    private boolean gameover;
 
     BitmapFont font;
 
     float middleX = 0;
     float middleY = 0;
-    float[] difX = new float[wavetotal];
-    float[] difY = new float[wavetotal];
+    float difX = 0;
+    float difY = 0;
 
-    public PlayState(GameStateManager gsm){
+    // Neural Network
+    NeuralNetWork nn;
+    String pathDataSet;
+    String pathNetwork;
+    int[] layers = new int[]{2, 2, 1};
+    int weightstotal = 9;
+    int wavetotal = 1;
+    int wave = 0;
+    int gen = 0;
+    double mut = 0.05;
+    double[][] weights = new double[wavetotal][weightstotal];
+    double[][] bestWeights = new double[wavetotal][weightstotal];
+    float maxDistance = 0f;
+
+    public PlayState3(GameStateManager gsm){
         super(gsm);
 
         if(Gdx.graphics.getHeight() > FlappyBird.HEIGHT){
@@ -85,39 +84,18 @@ public class PlayState extends State {
         nn.LoadMLP();
 
         // Generate Weights Ramdom
-        WeightsRamdom(wavetotal, weightstotal);
-
-        // Get Weights and test Neural Network
-        for(int i=0; i<wavetotal; i++)
-            SetNN();
-
-        nn.SaveMLP();
+        RefreshWights();
 
         start();
 
-        System.out.println("Lista de pesos randomicamente gerados:");
-        System.out.println("---------------------------------------------------------------------");
-        for(int i=0; i<wavetotal; i++) {
-            System.out.printf(Locale.US, "%02d) ", i);
-            for (int j = 0; j < weightstotal; j++)
-                System.out.printf(Locale.US, "%017.13f, ", weights[i][j]);
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    private void start(){
-        birdDown = 0;
+        /*
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(1.0f, 1.0f);
 
-        for(int i=0; i<wavetotal; i++) {
-            bird[i] = new Bird(10, 200);
-        }
-
+        bird = new Bird(10, 200);
         point = new Texture("images/pingo.png");
-        background = new Texture("images_original/bg.png");
+        //background = new Texture("images_original/bg.png");
         ground = new Texture("images/ground.png");
         gameoverImg = new Texture("images_original/gameover.png");
 
@@ -126,22 +104,57 @@ public class PlayState extends State {
         for(int i = 1; i <= TUBE_COUNT; i++)
             tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
 
-        for(int i=0; i<wavetotal; i++)
-            gameover[i] = false;
+        //groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, GROUND_Y_OFFSET);
+        //groundPos2 = new Vector2((cam.position.x - cam.viewportWidth / 2) + ground.getWidth(), GROUND_Y_OFFSET);
 
         groundPos1 = new Vector2(ground.getWidth() * (-1), GROUND_Y_OFFSET);
         groundPos2 = new Vector2(0, GROUND_Y_OFFSET);
         groundPos3 = new Vector2(ground.getWidth(), GROUND_Y_OFFSET);
         groundPos4 = new Vector2(ground.getWidth() * 2, GROUND_Y_OFFSET);
         groundPos5 = new Vector2(ground.getWidth() * 3, GROUND_Y_OFFSET);
+
+        gameover = false;
+        */
+    }
+
+    private void start(){
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1.0f, 1.0f);
+
+        bird = new Bird(10, 200);
+        point = new Texture("images/pingo.png");
+        //background = new Texture("images_original/bg.png");
+        ground = new Texture("images/ground.png");
+        gameoverImg = new Texture("images_original/gameover.png");
+
+        tubes = new Array<Tube>();
+
+        for(int i = 1; i <= TUBE_COUNT; i++)
+            tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
+
+        groundPos1 = new Vector2(ground.getWidth() * (-1), GROUND_Y_OFFSET);
+        groundPos2 = new Vector2(0, GROUND_Y_OFFSET);
+        groundPos3 = new Vector2(ground.getWidth(), GROUND_Y_OFFSET);
+        groundPos4 = new Vector2(ground.getWidth() * 2, GROUND_Y_OFFSET);
+        groundPos5 = new Vector2(ground.getWidth() * 3, GROUND_Y_OFFSET);
+
+        gameover = false;
     }
 
     private void SetNN(){
-        // Get weights and set NeuralNetwork on items
-        for(int i=0; i<wavetotal; i++)
-            // Define weights for shots
-            for (int j=0; j<weightstotal; j++)
+        for(int i=0; i<wavetotal; i++) {
+            // Get weights and set NeuralNetwork on items
+            for (int j=0; j<weightstotal; j++) {
+                // Define weights for shots
                 nn.setWeights(weights[i]);
+
+                // Test NeuralNetwork
+                //double[] output = nn.SetNN(new double[]{targetX/100});
+                //angle[i] = (float) output[0];
+                //power[i] = (float) output[1] * 100;
+            }
+        }
     }
 
     public float RamdomValues(float  min, float  max){
@@ -157,50 +170,41 @@ public class PlayState extends State {
 
     @Override
     public void handleInput() {
-        /*
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             if(gameover)
-                gsm.set(new PlayState(gsm));
+                gsm.set(new PlayState3(gsm));
             else
                 bird.jump();
         }
 
         if(Gdx.input.isTouched()) {
             if(gameover)
-                gsm.set(new PlayState(gsm));
+                gsm.set(new PlayState3(gsm));
             else
                 bird.jump();
         }
-        */
     }
 
     @Override
     public void update(float dt) {
-        //handleInput();
+        handleInput();
         updateGround();
-
-        for(int i=0; i<wavetotal; i++)
-            bird[i].update(dt);
-
-        cam.position.set(bird[bestbird].getX() + 80, cam.viewportHeight / 2, 0);
+        bird.update(dt);
+        cam.position.set(bird.getX() + 80, cam.viewportHeight / 2, 0);
 
         for(Tube tube : tubes){
             if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTopTube().getWidth())
                 tube.reposition(tube.getPosTopTube().x +((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
 
-            for(int i=0; i<wavetotal; i++) {
-                if (tube.collides(bird[i].getBounds())) {
-                    bird[i].colliding = true;
-                    gameover[i] = true;
-                }
+            if(tube.collides(bird.getBounds())){
+                bird.colliding = true;
+                gameover = true;
             }
         }
 
-        for(int i=0; i<wavetotal; i++) {
-            if (bird[i].getY() <= ground.getHeight() + GROUND_Y_OFFSET) {
-                bird[i].colliding = true;
-                gameover[i] = true;
-            }
+        if(bird.getY() <= ground.getHeight() + GROUND_Y_OFFSET){
+            bird.colliding = true;
+            gameover = true;
         }
 
         cam.update();
@@ -210,9 +214,10 @@ public class PlayState extends State {
         // Generate Weights Ramdom
         WeightsRamdom(wavetotal, weightstotal);
 
-        for(int i=0; i<wavetotal; i++)
+        for(int i=0; i<wavetotal; i++) {
             // Get Weights and test Neural Network
             SetNN();
+        }
 
         nn.SaveMLP();
     }
@@ -240,6 +245,8 @@ public class PlayState extends State {
         sb.begin();
         //sb.draw(background, cam.position.x - (cam.viewportWidth / 2), 0);
 
+        int i = 0;
+
         for(Tube tube : tubes){
             sb.draw(tube.getBottomTube(), tube.getPosBottomTube().x, tube.getPosBottomTube().y);
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
@@ -247,106 +254,54 @@ public class PlayState extends State {
             middleX = tube.getPosTopTube().x + tube.TUBE_WIDTH / 2;
             middleY = tube.getPosTopTube().y - tube.TUBE_GAP / 2;
 
-            for(int i=0; i<wavetotal; i++) {
-                difX[i] = (middleX - (bird[i].getX() - 00));
-                difY[i] = (middleY - (bird[i].getY() - 82));
+            difX = (middleX - (bird.getX() - 00));
+            difY = (middleY - (bird.getY() - 82));
 
-                nn.setWeights(weights[i]);
+            double output = nn.TestNN(new double[]{ (difX/100), (difY/100)})[0];
 
-                double output = nn.TestNN(new double[]{(difX[i] / 100), (difY[i] / 100)})[0];
-                //float output = RamdomValues(0, 9);
+            if(output > 0.5)
+                bird.jump();
 
-                if (output < 0.2)
-                    bird[i].jump();
+            if( difX > 0 && difX < 175 ) {
+                sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
+                //font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
+                //System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
+                //System.out.printf(Locale.US, "output = %0 20.17f%n", output );
 
-                /*
-                if (gameover[i]) {
-                    if (bird[i].getX() > maxDistance) {
-                        maxDistance = bird[i].getX();
-                        bestbird = i;
-                    }
-
-                    if(birdDown < wavetotal) {
-                        System.out.printf(Locale.US,"%02d - Down! %f%n",birdDown , bird[i].getX());
-                        birdDown++;
-                    }
-
-                    if(birdDown == wavetotal) {
-                        System.out.println(birdDown + "---------------------------------------------------------------------");
-                        //RefreshWights();
-                        start();
-                    }
-                }
-                */
+                if( (middleX - bird.getX()) < 2)
+                    System.out.println("-------------------------------------------------------------");
             }
         }
-
-        for(int i=0; i<wavetotal; i++) {
-            /*
-            if (gameover[i]) {
-                if (bird[i].getX() > maxDistance) {
-                    maxDistance = bird[i].getX();
-                    bestbird = i;
-                }
-
-                if(birdDown < wavetotal) {
-                    System.out.printf(Locale.US,"%02d - Down! %f%n",birdDown , bird[i].getX());
-                    birdDown++;
-                }
-
-                if(birdDown == wavetotal) {
-                    System.out.println(birdDown + "---------------------------------------------------------------------");
-                    RefreshWights();
-                    start();
-                }
-            }
-            */
-            sb.draw(bird[i].getTexture(), bird[i].getX(), bird[i].getY());
-        }
-
-        /*
-        for(int i=0; i<wavetotal; i++)
-            System.out.printf(Locale.US,"%02d %f%n",i , bird[i].getX());
-
-        for(int i=0; i<wavetotal; i++)
-            sb.draw(bird[i].getTexture(), bird[i].getX(), bird[i].getY());
-
-        for(int i=0; i<wavetotal; i++) {
-            if (gameover[i]) {
-                if (bird[i].getX() > maxDistance) {
-                    maxDistance = bird[i].getX();
-
-                    double wtmp[] = nn.getWeights();
-                    //bestWeights = CloneWeights(wavetotal, 1, weights, wtmp, mut);
-                    //nn.setWeights(bestWeights[0]);
-
-                    //System.out.println("---------------------------------------------------------------------");
-                    //System.out.printf(Locale.US, "distance = %f%n%s%n", maxDistance, Arrays.toString(wtmp));
-                    //System.out.println("---------------------------------------------------------------------");
-                } else {
-                    //RefreshWights();
-                    //System.out.printf(Locale.US, "%f%n%s%n", maxDistance, Arrays.toString(weights[0]));
-                }
-
-                if(birdDown < wavetotal) {
-                    System.out.printf(Locale.US,"%02d - Down! %f%n",birdDown , bird[i].getX());
-                    birdDown++;
-                }
-
-                if(birdDown == wavetotal) {
-                    System.out.println("---------------------------------------------------------------------");
-                    RefreshWights();
-                    start();
-                }
-            }
-        }
-        */
 
         sb.draw(ground, groundPos1.x, groundPos1.y);
         sb.draw(ground, groundPos2.x, groundPos2.y);
         sb.draw(ground, groundPos3.x, groundPos3.y);
         sb.draw(ground, groundPos4.x, groundPos4.y);
         sb.draw(ground, groundPos5.x, groundPos5.y);
+
+        sb.draw(bird.getTexture(), bird.getX(), bird.getY());
+
+        if(gameover) {
+            //sb.draw(gameoverImg, cam.position.x - gameoverImg.getWidth() / 2, cam.position.y);
+            //RefreshWights();
+
+
+            if(bird.getX() > maxDistance) {
+                maxDistance = bird.getX();
+                double wtmp[] = nn.getWeights();
+                bestWeights = CloneWeights(wavetotal, 1, weights, wtmp, mut);
+                nn.setWeights(bestWeights[0]);
+
+                System.out.println("---------------------------------------------------------------");
+                System.out.printf(Locale.US, "distance = %f%n%s%n", maxDistance, Arrays.toString(bestWeights[0]) );
+                System.out.println("---------------------------------------------------------------");
+            }else{
+                RefreshWights();
+                System.out.printf(Locale.US, "%f%n%s%n", maxDistance, Arrays.toString(weights[0]) );
+            }
+
+            start();
+        }
 
         sb.end();
     }

@@ -15,16 +15,18 @@ public class MenuState extends State{
 
         background = new Texture("images_original/bg.png");
         playBtn = new Texture("images_original/playbtn.png");
-        new PlayState(gsm);
+        //new PlayState(gsm);
     }
 
     @Override
     public void handleInput() {
+        /*
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
             gsm.set(new PlayState(gsm));
 
         if(Gdx.input.justTouched())
             gsm.set(new PlayState(gsm));
+        */
     }
 
     @Override
