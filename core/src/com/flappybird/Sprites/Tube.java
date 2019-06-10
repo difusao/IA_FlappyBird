@@ -19,8 +19,8 @@ public class Tube {
 
     public Tube(float x){
         // Textures
-        topTube = new Texture("images_original/toptube.png");
-        bottomTube = new Texture("images_original/bottomtube.png");
+        topTube = new Texture("images/toptube.png");
+        bottomTube = new Texture("images/bottomtube.png");
 
         rand = new Random();
 

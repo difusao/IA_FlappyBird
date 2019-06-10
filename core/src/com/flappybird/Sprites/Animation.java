@@ -31,7 +31,6 @@ public class Animation {
         }
         if(frame >= frameCount)
             frame = 0;
-
     }
 
     public void flip(){

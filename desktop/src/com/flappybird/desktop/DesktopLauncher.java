@@ -10,7 +10,7 @@ public class DesktopLauncher {
 
 		config.width=480;
 		config.height=800;
-		config.x = 1500;
+		config.x = 0;
 		config.y = 0;
 
 		new LwjglApplication(new FlappyBird(), config);

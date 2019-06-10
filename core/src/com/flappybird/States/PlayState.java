@@ -17,9 +17,6 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
-//adb shell screenrecord /sdcard/flappybird.mp4
-//adb shell screencap -p > flappybird.jpg
-
 public class PlayState extends State {
 
     private static final int GROUND_Y_OFFSET = -30;
@@ -92,9 +89,6 @@ public class PlayState extends State {
         // Load NeuralNetwork
         nn.LoadMLP();
 
-        // Save Network
-        //nn.SaveMLP();
-
         // Generate Weights Ramdom
         WeightsRamdom(wavetotal, weightstotal);
 
@@ -120,19 +114,19 @@ public class PlayState extends State {
 
         font1 = new BitmapFont(Gdx.files.internal("fonts/font-export.fnt"));
         font1.setColor(Color.WHITE);
-        font1.getData().setScale(0.5f, 0.5f);
+        font1.getData().setScale(1.0f, 1.0f);
 
         font2 = new BitmapFont(Gdx.files.internal("fonts/font-export.fnt"));
         font2.setColor(Color.WHITE);
-        font2.getData().setScale(0.5f, 0.5f);
+        font2.getData().setScale(1.0f, 1.0f);
 
         for(int i=0; i<wavetotal; i++)
             bird[i] = new Bird(10, 200);
 
         point = new Texture("images/pingo.png");
-        background = new Texture("images_original/bg.png");
-        ground = new Texture("images_original/ground.png");
-        gameoverImg = new Texture("images_original/gameover.png");
+        background = new Texture("images/bgbig.png");
+        ground = new Texture("images/ground.png");
+        gameoverImg = new Texture("images/gameover.png");
 
         tubes = new Array<Tube>();
 
@@ -168,22 +162,6 @@ public class PlayState extends State {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isTouched()){
             start();
         }
-
-        /*
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            if(gameover)
-                gsm.set(new PlayState(gsm));
-            else
-                bird.jump();
-        }
-
-        if(Gdx.input.isTouched()) {
-            if(gameover)
-                gsm.set(new PlayState(gsm));
-            else
-                bird.jump();
-        }
-        */
     }
 
     @Override
@@ -257,9 +235,10 @@ public class PlayState extends State {
             maxDistance = 0;
             bestbird = 0;
 
-            //Gdx.app.exit();
-            start();
+            // Save Network
+            nn.SaveMLP();
 
+            start();
         }
     }
 
@@ -344,10 +323,10 @@ public class PlayState extends State {
         sb.draw(ground, groundPos4.x, groundPos4.y);
         sb.draw(ground, groundPos5.x, groundPos5.y);
 
-        font2.draw(sb, "Generation: " + String.format(Locale.US, "%04d", gen), cam.position.x - 115, 55);
-        font2.draw(sb, "Population: " + String.format(Locale.US, "%03d", wavetotal), cam.position.x - 115, 35);
-        font1.draw(sb, "Score: " + String.format(Locale.US, "%09d / %09d", score, scoreTotal), cam.position.x - 115, 395);
-        font2.draw(sb, "Leader: " + String.format(Locale.US, "%d Activies: %d (%d)", (bestbird+1), birdUp, birdDown), cam.position.x - 115, 15);
+        font2.draw(sb, "Generation: " + String.format(Locale.US, "%04d", gen), cam.position.x - 230, 730);
+        font2.draw(sb, "Population: " + String.format(Locale.US, "%03d", wavetotal), cam.position.x - 230, 760);
+        font1.draw(sb, "Score: " + String.format(Locale.US, "%09d / %09d", score, scoreTotal), cam.position.x - 230, 790);
+        font2.draw(sb, "Leader: " + String.format(Locale.US, "%d Activies: %d (%d)", (bestbird+1), birdUp, birdDown), cam.position.x - 230, 700);
 
         sb.end();
     }

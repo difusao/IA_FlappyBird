@@ -13,25 +13,21 @@ public class MenuState extends State{
     public MenuState(GameStateManager gsm) {
         super(gsm);
 
-        background = new Texture("images_original/bg.png");
-        playBtn = new Texture("images_original/playbtn.png");
-        //new PlayState(gsm);
+        background = new Texture("images/bg.png");
+        playBtn = new Texture("images/playbtn.png");
     }
 
     @Override
     public void handleInput() {
-        /*
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
             gsm.set(new PlayState(gsm));
 
         if(Gdx.input.justTouched())
             gsm.set(new PlayState(gsm));
-        */
     }
 
     @Override
     public void update(float dt) {
-        //handleInput();
         gsm.set(new PlayState(gsm));
     }
 

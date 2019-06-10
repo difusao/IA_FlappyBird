@@ -23,5 +23,9 @@ FlappyBird IA Neural Networks and Genectic Algorithm
 
 ### Be aware of a game bug
 
+## Screen Capture on Android
+adb shell screenrecord /sdcard/flappybird.mp4
+adb shell screencap -p > flappybird.jpg
+
 ## Credits
 - [Geovani José Malaquias](https://github.com/difusao)

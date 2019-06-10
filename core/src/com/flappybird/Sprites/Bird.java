@@ -5,9 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-/**
- * Created by Brent on 6/25/2015.
- */
 public class Bird {
     private static final int GRAVITY = -15;
     private static final int MOVEMENT = 100;
@@ -25,7 +22,7 @@ public class Bird {
     public Bird(int x, int y){
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
-        texture = new Texture("images_original/birdanimation.png");
+        texture = new Texture("images/birdanimation.png");
         birdAnimation = new Animation(new TextureRegion(texture), 3, 0.5f);
         bounds = new Rectangle(x, y, texture.getWidth()/3, texture.getHeight());
         colliding = false;
