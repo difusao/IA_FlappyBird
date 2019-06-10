@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.images"
+        applicationId "com.flappybird"
         minSdkVersion 9
         targetSdkVersion 28
         versionCode 1

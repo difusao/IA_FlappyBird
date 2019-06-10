@@ -29,7 +29,7 @@ public class PlayState extends State {
     String pathNetwork;
     int[] layers = new int[]{2, 2, 1};
     int weightstotal = 9;
-    int wavetotal = 10;
+    int wavetotal = 100;
     int bestbird = 0;
     int gen = 0;
     int scoreTotal = 0;
@@ -344,7 +344,7 @@ public class PlayState extends State {
         font2.draw(sb, "Generation: " + String.format(Locale.US, "%04d", gen), cam.position.x - 115, 55);
         font2.draw(sb, "Population: " + String.format(Locale.US, "%03d", wavetotal), cam.position.x - 115, 35);
         font1.draw(sb, "Score: " + String.format(Locale.US, "%09d / %09d", score, scoreTotal), cam.position.x - 115, 395);
-        font2.draw(sb, "Leader: " + String.format(Locale.US, "%d Actives: %d (%d)", (bestbird+1), birdUp, birdDown), cam.position.x - 115, 15);
+        font2.draw(sb, "Leader: " + String.format(Locale.US, "%d Activies: %d (%d)", (bestbird+1), birdUp, birdDown), cam.position.x - 115, 15);
 
         sb.end();
     }
