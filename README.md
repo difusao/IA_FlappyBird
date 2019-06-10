@@ -5,11 +5,11 @@ FlappyBird IA Neural Networks and Genectic Algorithm
 
 - Windows Desktop Resolution:
 480px x 800px
-![FlappyBird](https://github.com/difusao/FlappyBird/blob/master/android/assets/images/FlappyBirdDesktop.PNG)
+![FlappyBird](https://github.com/difusao/FlappyBird/blob/DevCore/android/assets/images/FlappyBirdDesktop.PNG)
 
 - Android Resolution:
 2246px x 1080px
-![FlappyBird](https://github.com/difusao/FlappyBird/blob/master/android/assets/images/FlappyBirdAndroid.png)
+![FlappyBird](https://github.com/difusao/FlappyBird/blob/DevCore/android/assets/images/FlappyBirdAndroid.jpg)
 
 ## Installation
 - AndroidStudio 3.4
