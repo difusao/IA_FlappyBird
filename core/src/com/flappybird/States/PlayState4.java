@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
-public class PlayState extends State {
+public class PlayState4 extends State {
 
     private static final int GROUND_Y_OFFSET = -30;
     private static final int TUBE_SPACING = 125;
@@ -62,7 +62,7 @@ public class PlayState extends State {
     float[] difX = new float[wavetotal];
     float[] difY = new float[wavetotal];
 
-    public PlayState(GameStateManager gsm){
+    public PlayState4(GameStateManager gsm){
         super(gsm);
 
         if(Gdx.graphics.getHeight() > FlappyBird.HEIGHT){

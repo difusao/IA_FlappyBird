@@ -156,9 +156,9 @@ public class PlayState2 extends State  {
             difX = (middleX - (bird[0].getX() - 25));
             difY = ((middleY-82) - (bird[0].getY() - 82));
 
-            //font[0].draw(sb, "(" + (middleY -bird[0].getX()) + ")", tube.getPosTopTube().x, middleY);
+            //font1[0].draw(sb, "(" + (middleY -bird[0].getX()) + ")", tube.getPosTopTube().x, middleY);
             //if( difX > 0 && difX < 175 ) {
-            //    font[0].draw(sb, "pos= " + String.format(Locale.US,"%01.0f / %01.0f", difX, difY) , middleX, middleY);
+            //    font1[0].draw(sb, "pos= " + String.format(Locale.US,"%01.0f / %01.0f", difX, difY) , middleX, middleY);
             //    sb.draw(point, middleX - 30, middleY);
             //}
         }

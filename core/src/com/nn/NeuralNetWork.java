@@ -22,7 +22,7 @@ public class NeuralNetWork {
     }
 
     public void CreateMLP(int[] neuronsInLayers){
-        MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, neuronsInLayers);
+        MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.LINEAR, neuronsInLayers);
         myMlPerceptron.setLabel("NeuralNetWork");
         myMlPerceptron.save(_pathNetwork);
     }

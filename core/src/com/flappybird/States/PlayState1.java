@@ -219,8 +219,8 @@ public class PlayState1 extends State {
 
         for(int i=0; i<nbird; i++) {
             sb.draw(bird[i].getTexture(), bird[i].getX(), bird[i].getY());
-            //font[i].draw(sb,i+"",bird[i].getX() - (bird[i].getWidth() / 2)+65, bird[i].getY() + (bird[i].getHeight() / 2) + 5);
-            //font[i].draw(sb, "(" + (bird[i].getX() - middle) +  ")", bird[i].getX() + (bird[i].getWidth() / 2) - 15, bird[i].getY() + (bird[i].getHeight() / 2) + 15 );
+            //font1[i].draw(sb,i+"",bird[i].getX() - (bird[i].getWidth() / 2)+65, bird[i].getY() + (bird[i].getHeight() / 2) + 5);
+            //font1[i].draw(sb, "(" + (bird[i].getX() - middle) +  ")", bird[i].getX() + (bird[i].getWidth() / 2) - 15, bird[i].getY() + (bird[i].getHeight() / 2) + 15 );
             //System.out.println(tubodist);
         }
 
@@ -230,7 +230,7 @@ public class PlayState1 extends State {
         batch.begin();
         int salt = FlappyBird.HEIGHT;
         for(int i=0; i<nbird; i++) {
-            //font[i].draw(batch, "[" + i + "]  x = " + Math.round(bird[i].getX()) + " y = " + Math.round(bird[i].getY()), (FlappyBird.WIDTH - 200), salt - 15);
+            //font1[i].draw(batch, "[" + i + "]  x = " + Math.round(bird[i].getX()) + " y = " + Math.round(bird[i].getY()), (FlappyBird.WIDTH - 200), salt - 15);
             //System.out.println(Math.round(bird[i].getX()) +"," + Math.round(bird[i].getY()));
             salt -= 24;
         }

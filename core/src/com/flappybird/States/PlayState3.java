@@ -89,9 +89,9 @@ public class PlayState3 extends State {
         start();
 
         /*
-        font = new BitmapFont();
-        font.setColor(Color.WHITE);
-        font.getData().setScale(1.0f, 1.0f);
+        font1 = new BitmapFont();
+        font1.setColor(Color.WHITE);
+        font1.getData().setScale(1.0f, 1.0f);
 
         bird = new Bird(10, 200);
         point = new Texture("images/pingo.png");
@@ -264,7 +264,7 @@ public class PlayState3 extends State {
 
             if( difX > 0 && difX < 175 ) {
                 sb.draw(point, ( middleX - point.getWidth() / 2 ), middleY);
-                //font.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
+                //font1.draw(sb, String.format(Locale.US,"x=%01.0f y=%01.0f", middleX, middleY), middleX, middleY);
                 //System.out.printf(Locale.US, "X=%06.2f, Y=%06.2f%n", difX, difY);
                 //System.out.printf(Locale.US, "output = %0 20.17f%n", output );
 
