@@ -34,8 +34,9 @@ FlappyBird IA Neural Networks and Genectic Algorithm
 - [Geovani J. Malaquias](https://github.com/difusao)
 
 ## Screen Capture on Android
-adb shell screenrecord /sdcard/flappybird.mp4
-adb shell screencap -p > flappybird.jpg
+- adb shell screenrecord /sdcard/flappybird.mp4
+- adb shell screencap -p > FlappyBirdAndroid.jpg
+- adb pull FlappyBirdAndroid.jpg
 
 ## Credits
 - [Geovani J. Malaquias](https://github.com/difusao)
