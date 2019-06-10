@@ -17,6 +17,9 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
+//adb shell screenrecord /sdcard/flappybird.mp4
+//adb shell screencap -p > flappybird.jpg
+
 public class PlayState extends State {
 
     private static final int GROUND_Y_OFFSET = -30;
