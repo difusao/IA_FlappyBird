@@ -12,8 +12,8 @@ FlappyBird IA Neural Networks and Genectic Algorithm
 ![FlappyBird](https://github.com/difusao/FlappyBird/blob/DevCore/android/assets/images/FlappyBirdAndroid.jpg)
 
 ## Installation
-- AndroidStudio 3.4
-- JRE 1.8.0_152
+- [AndroidStudio](https://developer.android.com/studio)
+- [JRE 1.8.0_152](https://www.java.com)
 
 ## How does it work
 - uma população inicial de 100 individuos é gerada.
@@ -22,14 +22,20 @@ FlappyBird IA Neural Networks and Genectic Algorithm
 - Se o resultado do neurônio da camada de saída for maior que 0.5 então o pássaro pula.
 
 ## Genetic Algorithm
+- O pássaro com maior desempenho (que for mais longe) terá seus pesos clonados com fator de mutação de 0.5%
+- A quantidade de peso clonadas refere-se ao tamanho da população menos 1. (Total clones = population - 1).
+- A cada geração um indivíduo mais eficiente será gerado.
 
 ## Implementation
+- Usado o [AndroidStudio](https://developer.android.com/studio) para desenvolvimento [Java](https://www.java.com) e biblioteca [LibGDX](https://libgdx.badlogicgames.com/).
+- Usado framework [Neuroph](http://neuroph.sourceforge.net/).
 
 ### Be aware of a game bug
+- [Geovani J. Malaquias](https://github.com/difusao)
 
 ## Screen Capture on Android
 adb shell screenrecord /sdcard/flappybird.mp4
 adb shell screencap -p > flappybird.jpg
 
 ## Credits
-- [Geovani José Malaquias](https://github.com/difusao)
+- [Geovani J. Malaquias](https://github.com/difusao)
