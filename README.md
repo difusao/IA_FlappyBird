@@ -16,6 +16,10 @@ FlappyBird IA Neural Networks and Genectic Algorithm
 - JRE 1.8.0_152
 
 ## How does it work
+- uma população inicial de 100 individuos é gerada.
+- Também é gerada 100 amostras de pesos aleatórios para a rede neural de 2 neurônios de entrada, 2 na camada oculta e 1 neurônio de saída e função de ativação LINEAR.
+- Os neurônios da camada de entrada correspondem a distância horizontal do pássaro e a distância vertical do pássaro até o próximo tudo.
+- Se o resultado do neurônio da camada de saída for maior que 0.5 então o pássaro pula.
 
 ## Genetic Algorithm
 
