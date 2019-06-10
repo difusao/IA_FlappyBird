@@ -121,7 +121,7 @@ public class PlayState extends State {
         font2.getData().setScale(1.0f, 1.0f);
 
         for(int i=0; i<wavetotal; i++)
-            bird[i] = new Bird(10, 200);
+            bird[i] = new Bird(0, 300);
 
         point = new Texture("images/pingo.png");
         background = new Texture("images/bgbig.png");
