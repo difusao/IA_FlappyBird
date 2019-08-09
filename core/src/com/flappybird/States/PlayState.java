@@ -29,12 +29,12 @@ public class PlayState extends State {
     String pathNetwork;
     int[] layers = new int[]{2, 2, 1};
     int weightstotal = 9;
-    int wavetotal = 100;
+    int wavetotal = 300;
     int bestbird = 0;
     int gen = 0;
     int scoreTotal = 0;
     int score = 0;
-    double mut = 0.01;
+    double mut = 0.08;
     double[][] weights = new double[wavetotal][weightstotal];
     double[] bestWeightsEver = new double[weightstotal];
     double bestDistancesEver = 0;
@@ -121,7 +121,7 @@ public class PlayState extends State {
         font2.getData().setScale(1.0f, 1.0f);
 
         for(int i=0; i<wavetotal; i++)
-            bird[i] = new Bird(0, 300);
+            bird[i] = new Bird(0, 200);
 
         point = new Texture("images/pingo.png");
         background = new Texture("images/bgbig.png");
@@ -164,6 +164,8 @@ public class PlayState extends State {
         }
     }
 
+    int py = 0;
+
     @Override
     public void update(float dt) {
         handleInput();
@@ -175,6 +177,7 @@ public class PlayState extends State {
         cam.position.set(bird[bestbird].getX() + 80, cam.viewportHeight / 2, 0);
 
         for(Tube tube : tubes){
+
             if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTopTube().getWidth())
                 tube.reposition(tube.getPosTopTube().x +((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
 
@@ -259,6 +262,8 @@ public class PlayState extends State {
             groundPos5.add(ground.getWidth() * 5, 0);
     }
 
+    float j = 0.01f;
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
@@ -268,12 +273,24 @@ public class PlayState extends State {
         int t = 0;
 
         for(Tube tube : tubes){
+
             sb.draw(tube.getBottomTube(), tube.getPosBottomTube().x, tube.getPosBottomTube().y);
             sb.draw(tube.getTopTube(), tube.getPosTopTube().x, tube.getPosTopTube().y);
 
             middleX[t] = (tube.getPosTopTube().x + tube.TUBE_WIDTH);
             middleY[t] = (tube.getPosTopTube().y - tube.TUBE_GAP/2);
 
+            if(tubes.get(t).getPosTopTube().y > 300) {
+                j = j - 0.01f;
+            }else{
+                j = j + 0.01f;
+            }
+
+            tubes.get(t).getPosTopTube().y = tubes.get(t).getPosTopTube().y + j;
+            tubes.get(t).getPosBottomTube().y = tubes.get(t).getPosBottomTube().y + j;
+
+            tubes.get(t).update(tubes.get(t).getPosTopTube().x, tubes.get(t).getPosTopTube().y);
+            //tubes.get(t).update(tubes.get(t).getPosBottomTube().x, tubes.get(t).getPosBottomTube().y);
             t++;
         }
 

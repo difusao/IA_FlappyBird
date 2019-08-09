@@ -29,6 +29,8 @@ public class Tube {
 
         boundsTop = new Rectangle(posTopTube.x, posTopTube.y, topTube.getWidth(), topTube.getHeight());
         boundsBottom = new Rectangle(posBottomTube.x, posBottomTube.y, bottomTube.getWidth(), bottomTube.getHeight());
+
+
     }
 
     public Texture getTopTube() {
@@ -68,6 +70,11 @@ public class Tube {
         posBottomTube.set(x, posTopTube.y - TUBE_GAP - bottomTube.getHeight());
         boundsTop.setPosition(x, posTopTube.y);
         boundsBottom.setPosition(x, posBottomTube.y);
+    }
+
+    public void update(float x, float y){
+        boundsTop = new Rectangle(posTopTube.x, posTopTube.y, topTube.getWidth(), topTube.getHeight());
+        boundsBottom = new Rectangle(posBottomTube.x, posBottomTube.y, bottomTube.getWidth(), bottomTube.getHeight());
     }
 
     public boolean collides(Rectangle player){
